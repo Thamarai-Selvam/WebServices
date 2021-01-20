@@ -29,6 +29,6 @@ Directory Structure
    *Built on vanilla PHP, no need for any server tools or xampp, make sure PHP is installed on the system and added to PATH*
    
    ``` php -S localhost:5000 ```  
-   Go to localhost:3000  
+   Go to localhost:5000  
    Follow UI 
    
