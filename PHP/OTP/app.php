@@ -71,6 +71,8 @@
 <body>
 <?php
     $typeContent = "";
+    $length = "6";
+    $otpType = "2";
     $otpContent = ""; 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $length = $_POST['length'];
@@ -111,9 +113,9 @@
     <div class="workarea">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
             <label for="message">OTP Length</label><br>
-            <input type="text" id="length" name="length" value=""><br>
+            <input type="text" id="length" name="length" value='<?php echo $length; ?>'><br>
             <label for="message">Type( 0 - Numeric, 1 - Alphabets, 2 - Alphanumeric)</label><br>
-            <input type="text" id="typeotp" name="typeotp" value=""><br>
+            <input type="text" id="typeotp" name="typeotp" value='<?php echo $otpType; ?>'><br>
             <input type="submit" value="Submit">
         </form>
         <form class='response_form'>
