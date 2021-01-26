@@ -1,7 +1,11 @@
 const express = require('express')
 const app = express()
 const bp = require('body-parser')
+app.use(bp.urlencoded({ extended: true }));
 
+app.set('views', __dirname);
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
 app.use(bp.text())
 
 function transpose(array) {
@@ -97,13 +101,22 @@ app.get('/matops', (req, res) => {
     console.log('matrixA', matrixA);
 
     if (operation == 0)
-        return res.send({ 'transpose': [...transpose(matrixA)] });
+    // return res.send({ 'transpose': [...transpose(matrixA)] });
+        res.render('index.html', { op: req.query.op, row: 3, col: 5, opName: "Transpose", matrix: req.query.matrix, response: [...transpose(matrixA)] })
     else if (operation == 1)
-        return res.send(upperDiagonal(matrixA, row, col));
+    // return res.send(upperDiagonal(matrixA, row, col));
+        res.render('index.html', { op: req.query.op, row: 3, col: 5, opName: "Upper Diagonal", matrix: req.query.matrix, response: JSON.stringify(upperDiagonal(matrixA, row, col)) })
     else
-        return res.send(lowerDiagonal(matrixA, row, col));
+    // return res.send(lowerDiagonal(matrixA, row, col));
+        res.render('index.html', { op: req.query.op, row: 3, col: 5, opName: "Lower Diagonal ", matrix: req.query.matrix, response: JSON.stringify(lowerDiagonal(matrixA, row, col)) })
+
 
 })
 
-//start 
+
+app.get('/', (req, res) => {
+
+    res.render('index.html', { op: 0, opName: "", row: 3, col: 5, matrix: "1,2,3,4,5,6,7,8,9,0,11,12,13,14,15", response: "" });
+})
+
 app.listen(3000)

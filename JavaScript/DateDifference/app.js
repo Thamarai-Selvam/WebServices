@@ -71,7 +71,7 @@ app.get('/datediff', (req, res) => {
 
     var resultDiff = diffDateSet[5] + ' Years' + diffDateSet[4] + ' Months' + diffDateSet[3] + ' Days' + diffDateSet[2] + ' Hours' + diffDateSet[1] + ' Minutes' + diffDateSet[0] + ' Seconds'
 
-
+    res.render()
 
 
     res.send(resultDiff);

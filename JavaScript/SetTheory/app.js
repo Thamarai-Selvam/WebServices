@@ -44,10 +44,10 @@ app.get('/setops', (req, res) => {
     console.log(req.query)
     if (operation == 0) {
         console.log(setA.union(setB))
-        res.render('index.html', { operation: req.query.operation, operationName: "Union", setA: req.query.setA, setB: req.query.setB, response: setA.union(setB) })
+        res.render('index.html', { operation: req.query.operation, operationName: "Union", setA: req.query.setA, setB: req.query.setB, response: [...setA.union(setB)].join(', ') })
     } else if (operation == 1) {
         console.log(setA.intersection(setB))
-        res.render('index.html', { operation: req.query.operation, operationName: "Intersection", setA: req.query.setA, setB: req.query.setB, response: setA.intersection(setB) })
+        res.render('index.html', { operation: req.query.operation, operationName: "Intersection", setA: req.query.setA, setB: req.query.setB, response: [...setA.intersection(setB)].join(', ') })
     } else {
         console.log(setA.minus(setB))
         res.render('index.html', {
@@ -55,7 +55,7 @@ app.get('/setops', (req, res) => {
             operationName: "Minus",
             setA: req.query.setA,
             setB: req.query.setB,
-            response: JSON.stringify(setA.minus(setB))
+            response: [...setA.minus(setB)].join(', ')
         })
     }
 
