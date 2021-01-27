@@ -65,10 +65,14 @@ function crt(data) {
     return i;
 }
 
-function nrt(data) {
-    var x = data[0],
-        n = data[1];
-    return (((x > 1 || x < -1) && n == 0) ? Infinity : ((x > 0 || x < 0) && n == 0) ? 1 : (x < 0 && n % 2 == 0) ? `${((x < 0 ? -x : x) ** (1 / n))}${"i"}` : (n == 3 && x < 0) ? -Math.cbrt(-x) : (x < 0) ? -((x < 0 ? -x : x) ** (1 / n)) : (n == 3 && x > 0 ? Math.cbrt(x) : (x < 0 ? -x : x) ** (1 / n)));
+function nrt(data, pow) {
+    var x = data,
+        n = pow;
+    return (((x > 1 || x < -1) && n == 0) ?
+        Infinity : ((x > 0 || x < 0) && n == 0) ? 1 : (x < 0 && n % 2 == 0) ?
+        `${((x < 0 ? -x : x) ** (1 / n))}${"i"}` : (n == 3 && x < 0) ?
+        -Math.cbrt(-x) : (x < 0) ? -((x < 0 ? -x : x) ** (1 / n)) : (n == 3 && x > 0 ?
+            Math.cbrt(x) : (x < 0 ? -x : x) ** (1 / n)));
 }
 
 app.get('/log2', (req, res) => {
@@ -83,26 +87,27 @@ app.get('/log2', (req, res) => {
         var vOpName = "GCF and LCM";
         var vresult = gcf(data) + " and " + lcm(data)
     } else if (op == 1) {
-        var data = parseInt(req.query.data)
+        var data = parseInt(req.query.num)
 
         var vresult = sqrt(data) + ' and ' + crt(data)
         var vOpName = "Square Root and Cube Root";
 
     } else if (op == 2) {
-        var data = req.query.data.split(',').map(Number)
-        var vresult = nrt(data)
+        var data = req.query.num3
+        var pow = req.query.pow
+        var vresult = nrt(data, pow)
         var vOpName = "Nth Root";
     } else {
         res.status(500).send('Invalid Data !')
     }
 
-    res.render('index.html', { data: data, opName: vOpName, result: vresult })
+    res.render('index.html', { data: data, num: data, num3: data, opName: vOpName, pow: pow, result: vresult })
 
 })
 
 
 app.get('/', (req, res) => {
-    res.render('index.html', { data: "1,2,3,4,5,6", opName: "vv", result: "" });
+    res.render('index.html', { data: "1,2,3,4,5,6", num: "", num3: "", opName: "Result", pow: "", result: "" });
 })
 
 app.listen(3000)

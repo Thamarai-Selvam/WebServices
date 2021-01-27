@@ -56,14 +56,28 @@
     </div>
     <div class="workarea">
         <form action="/log2">
-            <label for="data">Enter the data:</label>
-            <input type="text" id="data" name="data" value="<%= data %>"></br>
-            <select name="opChoice" id="opChoice">
-                <option id="blankOption" selected="true" disabled="disabled">-- Select an Option --</option>
+            <center> <select name="opChoice" id="opChoice" onchange="changeset()">
+                <option id="blankOption" selected="true" disabled="disabled" >-- Select an Option --</option>
                 <option id="gcflcm" value="0">GCF and LCM</option>
                 <option id="sqcrt" value="1">Square and Cube Root</option>
                 <option id="nrt" value="2">N<sup>th</sup> Root</option>
-            </select>
+            </select></center>
+            </br>
+
+            <div id="opset1" style="display: block;">
+                <label for="data">Enter the data (Ex. 2,4,6,8):</label>
+                <input type="text" id="data" name="data" value="<%= data %>"></br>
+            </div>
+            <div id="opset2" style="display: none;">
+                <label for="data">Enter Number:</label>
+                <input type="text" id="num" name="num" value="<%= num %>"></br>
+            </div>
+            <div id="opset3" style="display: none;">
+                <label for="data">Enter Number : </label>
+                <input type="text" id="num3" name="num3" value="<%= num3 %>"></br>
+                <label for="data">Enter Root : </label>
+                <input type="text" id="pow" name="pow" value="<%= pow %>"></br>
+            </div>
             <input type="submit" value="Submit">
         </form>
 
@@ -74,6 +88,32 @@
         </form>
     </div>
 
+    <script>
+        function changeset() {
+            const opChoice = document.getElementById('opChoice').value;
+            if (opChoice == '0') {
+                document.getElementById('opset1').style.display = "block"
+                document.getElementById('opset2').style.display = "none"
+                document.getElementById('opset3').style.display = "none"
+                document.getElementById('result').value = ""
+
+            } else if (opChoice == '1') {
+                document.getElementById('opset1').style.display = "none"
+                document.getElementById('opset2').style.display = "block"
+                document.getElementById('opset3').style.display = "none"
+                document.getElementById('result').value = ""
+
+            } else {
+                document.getElementById('opset1').style.display = "none"
+                document.getElementById('opset2').style.display = "none"
+                document.getElementById('opset3').style.display = "block"
+                document.getElementById('result').value = ""
+
+            }
+
+
+        }
+    </script>
 </body>
 
 </html>
