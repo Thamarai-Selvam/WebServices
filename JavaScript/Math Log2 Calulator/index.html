@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Math Log2 Calculator</title>
+    <style>
+        body {
+            background-color: #4db8ff;
+            text-align: center;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .workarea {
+            text-align: left;
+            padding: 50px;
+        }
+        
+        input[type=text] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        input[type=submit] {
+            width: 40%;
+            background-color: #00b359;
+            color: white;
+            padding: 10px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+        
+        input[type=submit]:hover {
+            background-color: #00994d;
+        }
+        
+        .response_form {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info">
+        <h1>Math Log2 Calculator</h1>
+        <p>API Usage : Returns the result of selected log2 operations</p>
+
+    </div>
+    <div class="workarea">
+        <form action="/log2">
+            <label for="data">Enter the data:</label>
+            <input type="text" id="data" name="data" value="<%= data %>"></br>
+            <select name="opChoice" id="opChoice">
+                <option id="blankOption" selected="true" disabled="disabled">-- Select an Option --</option>
+                <option id="gcflcm" value="0">GCF and LCM</option>
+                <option id="sqcrt" value="1">Square and Cube Root</option>
+                <option id="nrt" value="2">N<sup>th</sup> Root</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+
+        <form class="response_form">
+            <label for="result"><%= opName %> of <%= data %> : </label>
+            <input type="text" id="result" name="result" value="<%= result %>"></br>
+
+        </form>
+    </div>
+
+</body>
+
+</html>

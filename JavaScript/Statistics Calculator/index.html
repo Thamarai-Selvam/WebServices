@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Statistics Calculator</title>
+    <style>
+        body {
+            background-color: #4db8ff;
+            text-align: center;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .workarea {
+            text-align: left;
+            padding: 50px;
+        }
+        
+        input[type=text] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        input[type=submit] {
+            width: 40%;
+            background-color: #00b359;
+            color: white;
+            padding: 10px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+        
+        input[type=submit]:hover {
+            background-color: #00994d;
+        }
+        
+        .response_form {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info">
+        <h1>Statistics Calculator</h1>
+        <p>API Usage : Returns the result of statistics operations</p>
+
+    </div>
+    <div class="workarea">
+        <form action="/statcalc">
+            <label for="data">Enter the data:</label>
+            <input type="text" id="data" name="data" value="<%= data %>">
+
+            <input type="submit" value="Submit">
+        </form>
+
+        <form class="response_form">
+            <label for="variance">Variance : </label>
+            <input type="text" id="variance" name="variance" value="<%= variance %>"></br>
+            <label for="stdev">Standard Deviation : </label>
+            <input type="text" id="stdev" name="stdev" value="<%= stDev %>"></br>
+            <label for="lreg">Linear Regression : </label>
+            <input type="text" id="lreg" name="lreg" value="<%= lReg %>">
+        </form>
+    </div>
+
+</body>
+
+</html>
