@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Math Log3 Calculator</title>
+    <style>
+        body {
+            background-color: #4db8ff;
+            text-align: center;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .workarea {
+            padding: 50px;
+        }
+        
+        input[type=text] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        input[type=submit] {
+            width: 10%;
+            background-color: #00b359;
+            color: white;
+            padding: 10px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+        
+        input[type=submit]:hover {
+            background-color: #00994d;
+        }
+        
+        .response_form {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info">
+        <h1>Math Log3 Calculator</h1>
+        <p>API Usage : Returns the result of selected log3 trignometry operations</p>
+
+    </div>
+    <div class="workarea">
+        <form action="/log3">
+            <select name="opChoice" id="opChoice">
+                <option id="blankOption" selected="true" disabled="disabled" >-- Select an Option --</option>
+                <option id="sin" value="0">sin</option>
+                <option id="cos" value="1">cos</option>
+                <option id="tan" value="2">tan</option> 
+                <option id="cosec" value="3">cosec</option>
+                <option id="sec" value="4">sec</option>
+                <option id="cot" value="5">cot</option>
+                <option id="arcsin" value="6">arcsin</option>
+                <option id="arccos" value="7">arccos</option>
+                <option id="arctan" value="8">arctan</option>
+                <option id="arccosec" value="9">arccosec</option>
+                <option id="arcsec" value="10">arcsec</option>
+                <option id="arccot" value="11">arccot</option>
+            </select>
+
+            <div id="opset1" style="display: inline-block;">
+                <label for="data"></label>
+                <input type="text" id="data" name="data" value="<%= data %>"></br>
+            </div>
+            <select name="degType" id="degType">
+                <option id="blankOption" selected="true" disabled="disabled" >-- Select an Option --</option>
+                <option id="deg" value="0">deg</option>
+                <option id="rad" value="1">rad</option>
+               
+            </select>
+            </br>
+            <input type="submit" value="Submit">
+        </form>
+
+        <form class="response_form">
+            <label for="result">Result: </label>
+            <input type="text" id="result" name="result" value="<%= result %>"></br>
+
+        </form>
+    </div>
+
+</body>
+
+</html>

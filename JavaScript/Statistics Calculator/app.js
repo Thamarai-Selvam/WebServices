@@ -22,30 +22,58 @@ function stdDev(arr) {
 
 }
 
-function lrReg(arr) {
-    return arr
+function lrReg(X, Y) {
 
+    const sumX = X.reduce((accumulator, value) => accumulator + value, 0)
+    const sumY = Y.reduce((accumulator, value) => accumulator + value, 0)
+    const sumXX = X.reduce((accumulator, value) => accumulator + value * value, 0)
+
+    let sumXY = 0;
+    for (let i = 0; i < X.length; i++) {
+        sumXY += X[i] * Y[i];
+    }
+    console.log(sumX, sumY, sumXX, sumXY)
+
+    // ANY ONE ARRAY LENGTH
+    const n = X.length
+
+    const a = ((sumY * sumXX) - (sumX * sumXY)) / ((n * sumXX) - (sumX * sumX))
+    const b = ((n * sumXY) - (sumX * sumY)) / ((n * sumXX) - (sumX * sumX))
+
+    // REGRESSSION EQUATION => Y = a + bx
+    return `${a} + ${b} (x)`
 }
+
+
 app.get('/statcalc', (req, res) => {
 
     console.log(req.query)
 
 
-    var data = req.query.data.split(',').map(Number)
-    console.log('data', data);
 
-    varn = variance(data)
-    stDev = stdDev(data)
-    lReg = lrReg(data)
+    var opChoice = parseInt(req.query.opChoice)
+    console.log('data', data, 'data1', data1);
 
-    res.render('index.html', { data: data, variance: varn, stDev: stDev, lReg: "-" })
+    if (opChoice == 0) {
+        var data = req.query.data.split(',').map(Number)
+        var result = variance(data)
+    } else if (opChoice == 1) {
+        var data = req.query.data.split(',').map(Number)
+        var result = stdDev(data)
+    } else {
+        var data1 = req.query.data1.split(',').map(Number)
+        var data2 = req.query.data2.split(',').map(Number)
+        var result = lrReg(data1, data2)
+    }
+
+    res.render('index.html', { data: data, data1: data1, data2: data2, result: result })
 
 })
 
 
 app.get('/', (req, res) => {
 
-    res.render('index.html', { data: "1,2,3,4,5,6", variance: 0, stDev: 0, lReg: "-" });
+    res.render('index.html', { data: "1,2,3,4,5,6", data1: "1,2,3,4,5,6", data2: "1,2,3,4,5,6", result: "" })
 })
 
 app.listen(3000)
