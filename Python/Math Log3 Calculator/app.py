@@ -68,7 +68,7 @@ def getTrigHandler():
     print(request.args)
 
     if(not request.args.get('opChoice') or not request.args.get('data')):
-        return 'Select a function', 500
+        return 'Select a function or Enter data', 500
     data = int(request.args['data'])
     opChoice = int(request.args['opChoice'])
     degType = int(request.args['degType'])
