@@ -1,4 +1,94 @@
-<!DOCTYPE html>
+from flask import Flask, request, Response, jsonify
+from flask_restful import Resource, Api, reqparse
+from flask_ngrok import run_with_ngrok
+import json
+import math
+
+app = Flask(__name__)
+PI = 3.141592653589793
+def getsin(number):
+
+    number %= 2 * PI
+    if (number < 0) :
+        number = 2 * PI - number
+    
+
+    sign = 1
+    if (number > PI) :
+        number -= PI
+        sign = -1
+    
+
+    PRECISION = 50
+    temp = 0
+    for i in range(PRECISION + 1) :
+        temp += math.pow(-1, i) * (math.pow(number, 2 * i + 1) / fact(2 * i + 1))
+    
+    result = sign * temp
+    return result
+
+
+def getCos(number):
+    number = (PI / 2) - number
+    return getsin(number)
+
+
+
+def fact(num):
+    if (num == 0 or num == 1):
+        return 1
+    else:
+        return num * fact(num - 1)
+
+
+
+def getTrigResult(x, op, degType):
+
+    if (op <= 5 and degType == 0):
+         x *= PI / 180
+    if (op == 0): y = getsin(x); #y = Math.sin(x);
+    elif (op == 1): y = getCos(x)
+    elif (op == 2): y = getsin(x) / getCos(x)
+    elif (op == 3): y = 1 / getsin(x)
+    elif (op == 4): y = 1 / getCos(x)
+    elif (op == 5): y = getCos(x) / getsin(x)
+    elif (op == 6): y = math.asin(x)
+    elif (op == 7): y = math.acos(x)
+    elif (op == 8): y = math.atan(x)
+    elif (op == 9): y = math.asin(1 / x)
+    elif (op == 10): y = math.acos(1 / x)
+    else: y = math.atan(1 / x)
+    if (op >= 6 and degType == 0): y *= 180 / PI
+    y = round(y, 8)
+    return y
+
+@app.route('/log3', methods=['GET'])
+def getTrigHandler():
+
+    print(request.args)
+
+    if(not request.args.get('opChoice') or not request.args.get('data')):
+        return 'Select a function', 500
+    data = int(request.args['data'])
+    opChoice = int(request.args['opChoice'])
+    degType = int(request.args['degType'])
+    if(opChoice >= 6 and data > 1):
+          return 'Arc(sin,cos,tan,cosec,sec,cot) can\'t be greater than 1 !', 500
+   
+    result = getTrigResult(data, opChoice, degType)
+    if (result):
+        return home(str(data),str(result))
+    else:
+        return 'Invalid Data !', 500
+    
+@app.errorhandler(404)
+def page_not_found(e):
+    return "<h1>404</h1><p>Page not found.</p>", 404
+
+
+@app.route('/', methods=['GET','POST'])
+def home(data="1",result=""):
+  return '''<!DOCTYPE html>
 <html>
 
 <head>
@@ -73,11 +163,10 @@
 
             <div id="opset1" style="display: inline-block;">
                 <label for="data"></label>
-                <input type="text" id="data" name="data" value="<%= data %>"></br>
+                <input type="text" id="data" name="data" value="'''+data+'''"></br>
             </div>
             <select name="degType" id="degType">
-                <option id="blankOption" selected="true" disabled="disabled" >-- Select an Option --</option>
-                <option id="deg" value="0">deg</option>
+                <option id="deg" value="0" selected="true">deg</option>
                 <option id="rad" value="1">rad</option> 
             </select>
             </br>
@@ -85,10 +174,14 @@
         </form>
         <form class="response_form">
             <label for="result">Result: </label>
-            <input type="text" id="result" name="result" value="<%= result %>"></br>
+            <input type="text" id="result" name="result" value="'''+result+'''"></br>
         </form>
     </div>
 
 </body>
 
 </html>
+'''
+
+if __name__ == '__main__':
+  app.run(debug=True)
