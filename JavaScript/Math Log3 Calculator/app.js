@@ -100,7 +100,8 @@ app.get('/log3', (req, res) => {
 
     result = getTrigResult(data, op, degType)
     if (result)
-        res.render('index.html', { data: data, num: data, degType: degType, result: result })
+    // res.render('index.html', { data: data, num: data, degType: degType, result: result })
+        res.send({ data: data, num: data, degType: degType, result: result })
     else
         res.status(500).send('Invalid Data !')
 

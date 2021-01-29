@@ -6,72 +6,60 @@ import math
 
 app = Flask(__name__)
 
-def rgcf(x, y) :
 
-    if (x == 0):
-        return y
-    return rgcf(y % x, x)
-
-
-def gcf(data) :
-
-    tempRes = data[0]
-   
-    for element in data:
-        tempRes = rgcf(element, tempRes)
-    if (tempRes == 1):
-        return 1
-    return tempRes
+def nLog(x) :
+    n = 99999999
+    return n * ((x ** (1 / n)) - 1)
 
 
-def rlcm(x, y) :
-    return 0 if (not x or not y) else abs((x * y) / rgcf(x, y))
+def log(x, base) :
+    try:
+        result = nLog(x) / nLog(base)
+    except:
+        result = 'Infinity'
+    return result
 
 
-def lcm(data) :
-    tempRes = data[0]
-    for element in data:
-        tempRes = rlcm(element, tempRes)
+def antiLog(a, b) :
 
-    if (tempRes == 1):
-        return 1
-    return tempRes
+    c = 1
+    for i in range(1,b+1):
+        c = c * a
+    return c
 
 
-
-@app.route('/log2', methods=['GET'])
+@app.route('/log1', methods=['GET'])
 def getHandler():
 
     print(request.args)
     opChoice = int(request.args['opChoice'])
     
-    if(opChoice == 0 and not request.args.get('data')):
-        return 'Enter Numbers set to find GCD and LCM', 500
-    elif(opChoice == 2 and not request.args.get('num3') and not request.args.get('pow')):
-        return 'Enter Number and Power to find Nth Root', 500
+    if(opChoice == 0 and not request.args.get('num3') and not request.args.get('base')):
+        return 'Enter Number and Base to find Log', 500
     elif(opChoice == 1 and not request.args.get('num')):
-        return 'Enter Number find Square and Cube Root', 500
+        return 'Enter Number to find Natural Log', 500
+    elif(opChoice == 2 and not request.args.get('data') and not request.args.get('pow')):
+        return 'Enter Number and Power to find Antilog', 500
 
     vOpName = data = pow = num = num3 = 0
+    
     if (opChoice == 0):
-        data = list(map(int,request.args['data'].split(',')))
+        data = int(request.args['num3'])
+        base = int(request.args['base'])
 
-        vOpName = "GCF and LCM of "
-        vresult = str(gcf(data)) + " and " + str(lcm(data))
+        vOpName = "Log "
+        vresult = log(data, base)
     elif (opChoice == 1):
-        data =  int(request.args['num'])
+        data = int(request.args['num'])
 
-        vresult = str(data**(1/2)) + ' and ' + str(data**(1/3))
-        vOpName = "Square Root and Cube Root of "
+        vresult = nLog(data)
+        vOpName = "Natural Log "
 
     elif (opChoice == 2):
-        data = int(request.args['num3'])
+        data = int(request.args['data'])
         pow = int(request.args['pow'])
-        vresult = data**(1/float(pow))
-
-        vOpName = '<sup>'+str(pow)+'</sup>√'+str(data)
-        pow = data = ''
-
+        vresult = antiLog(data, pow)
+        vOpName = "AntiLog "
     
     if (vresult):
         return home(str(data),str(vresult),str(vOpName), str(pow), str(data), str(data))
@@ -84,14 +72,16 @@ def page_not_found(e):
 
 
 @app.route('/', methods=['GET','POST'])
-def home(data="2,4,6,8,10",result="",opName='', pow='', num='', num3=''):
+def home(data="1",result="",opName='', pow='', num='', num3='', base=''):
   return '''<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Math Log2 Calculator</title>
+    <title>Math Log1 Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
     <style>
-         body {
+        body {
             background-color: #4db8ff;
             text-align: center;
             color: white;
@@ -146,47 +136,50 @@ def home(data="2,4,6,8,10",result="",opName='', pow='', num='', num3=''):
             padding-top: 50px;
         }
     </style>
+    
 </head>
 
-<body>
-    <div class="info">
-        <h1>Math Log2 Calculator</h1>
-        <p>API Usage : Returns the result of selected log2 operations</p>
+<body class="container">
+    <div class="row info">
+        <h1>Math Log1 Calculator</h1>
+        <p>API Usage : Returns the result of selected log1 operations</p>
 
     </div>
+
     <div class="workarea">
-        <form action="/log2">
+        <form action="/log1">
             <center> <select name="opChoice" id="opChoice" onchange="changeset()">
-                <option id="gcflcm" value="0" selected="true">GCF and LCM</option>
-                <option id="sqcrt" value="1">Square and Cube Root</option>
-                <option id="nrt" value="2">N<sup>th</sup> Root</option>
+                <option id="log" value="0" selected='true'>Logarithm(log)</option>
+                <option id="nlog" value="1">Natural Logarithm (ln)</option>
+                <option id="antilog" value="2"> Anti-logarithm </option>
             </select></center>
             </br>
-
             <div id="opset1" style="display: block;">
-                <label for="data">Enter the data (Ex. 2,4,6,8):</label>
-                <input type="text" id="data" name="data" value="'''+data+'''"></br>
+                <label for="data">Enter Number : </label>
+                <input type="text" id="num3" name="num3" value="'''+num3+'''"></br>
+                <label for="data">Enter Base : </label>
+                <input type="text" id="base" name="base" value="'''+base+'''"></br>
             </div>
+
             <div id="opset2" style="display: none;">
                 <label for="data">Enter Number:</label>
                 <input type="text" id="num" name="num" value="'''+num+'''"></br>
             </div>
             <div id="opset3" style="display: none;">
-                <label for="data">Enter Number : </label>
-                <input type="text" id="num3" name="num3" value="'''+num3+'''"></br>
-                <label for="data">Enter Root : </label>
+                <label for="data">Enter Number:</label>
+                <input type="text" id="data" name="data" value="'''+data+'''"></br>
+                <label for="data">Enter Power:</label>
                 <input type="text" id="pow" name="pow" value="'''+pow+'''"></br>
             </div>
             <input type="submit" value="Submit">
         </form>
 
         <form class="response_form">
-            <label for="result">'''+opName+' ' +data+''' : </label>
-            <input type="text" id="result" name="result" value="'''+result+'''"</br>
+            <label for="result">'''+opName+'''of '''+data+''' : </label>
+            <input type="text" id="result" name="result" value="'''+result+'''"></br>
 
         </form>
     </div>
-
     <script>
         function changeset() {
             const opChoice = document.getElementById('opChoice').value;

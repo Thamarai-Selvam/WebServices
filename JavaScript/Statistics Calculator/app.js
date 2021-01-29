@@ -66,7 +66,8 @@ app.get('/statcalc', (req, res) => {
         var result = lrReg(data1, data2)
     }
 
-    res.render('index.html', { data: data, data1: data1, data2: data2, result: result })
+    // res.render('index.html', { data: data, data1: data1, data2: data2, result: result })
+    res.send({ data: data, data1: data1, data2: data2, result: result })
 
 })
 

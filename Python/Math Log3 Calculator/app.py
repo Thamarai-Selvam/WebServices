@@ -55,9 +55,9 @@ def getTrigResult(x, op, degType):
     elif (op == 6): y = math.asin(x)
     elif (op == 7): y = math.acos(x)
     elif (op == 8): y = math.atan(x)
-    elif (op == 9): y = math.asin(1 / x)
-    elif (op == 10): y = math.acos(1 / x)
-    else: y = math.atan(1 / x)
+    elif (op == 9): y = 1/math.asin(x)
+    elif (op == 10): y = 1/math.acos(x)
+    else: y = 1/math.atan(x)
     if (op >= 6 and degType == 0): y *= 180 / PI
     y = round(y, 8)
     return y
@@ -69,7 +69,7 @@ def getTrigHandler():
 
     if(not request.args.get('opChoice') or not request.args.get('data')):
         return 'Select a function or Enter data', 500
-    data = int(request.args['data'])
+    data = float(request.args['data'])
     opChoice = int(request.args['opChoice'])
     degType = int(request.args['degType'])
     if(opChoice >= 6 and data > 1):

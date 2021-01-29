@@ -57,6 +57,8 @@ app.get('/log1', (req, res) => {
         res.status(500).send('Invalid Data !')
     }
 
+    // res.send({ 'Operation': vOpName, 'i/p data': data, 'result': vresult })
+    // res.send({ Operation: vOpName, data: data, pow: pow, base: base, num: data, num3: data, result: vresult })
     res.render('index.html', { data: data, pow: pow, base: base, num: data, num3: data, opName: vOpName, result: vresult });
 
 })
