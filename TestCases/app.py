@@ -58,9 +58,20 @@ baseURL = "http://localhost:3000/"
 
 #stat calculator
 
-print(requests.get(baseURL+'statcalc?opChoice=0&data=1,2,3,4,5,6&data1=&data2=').content)
-print(requests.get(baseURL+'statcalc?opChoice=0&data=2,5,7,1,4,5,6,7,2,3,4,5,12,4,6&data1=&data2=').content)
-print(requests.get(baseURL+'statcalc?opChoice=1&data=1,2,3,4,5,6&data1=&data2=').content)
-print(requests.get(baseURL+'statcalc?opChoice=1&data=2,5,7,1,4,5,6,7,2,3,4,5,12,4,56&data1=&data2=').content)
-print(requests.get(baseURL+'statcalc?opChoice=2&data=&data1=1,2,3,4,5,6&data2=2,3,4,5,7,8,11').content)
-print(requests.get(baseURL+'statcalc?opChoice=2&data=&data1=54,18,57,10&data2=1,3,14,5,57,84,10').content)
+# print(requests.get(baseURL+'statcalc?opChoice=0&data=1,2,3,4,5,6&data1=&data2=').content)
+# print(requests.get(baseURL+'statcalc?opChoice=0&data=2,5,7,1,4,5,6,7,2,3,4,5,12,4,6&data1=&data2=').content)
+# print(requests.get(baseURL+'statcalc?opChoice=1&data=1,2,3,4,5,6&data1=&data2=').content)
+# print(requests.get(baseURL+'statcalc?opChoice=1&data=2,5,7,1,4,5,6,7,2,3,4,5,12,4,56&data1=&data2=').content)
+# print(requests.get(baseURL+'statcalc?opChoice=2&data=&data1=1,2,3,4,5,6&data2=2,3,4,5,7,8,11').content)
+# print(requests.get(baseURL+'statcalc?opChoice=2&data=&data1=54,18,57,10&data2=1,3,14,5,57,84,10').content)
+
+
+#test electric calculator
+
+print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=1').content)
+print(requests.get(baseURL+'ecalc?num=10&aChoice=0&num1=12&vChoice=1').content)
+print(requests.get(baseURL+'ecalc?num=10&aChoice=2&num1=12&vChoice=1').content)
+print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=0').content)
+print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=1').content)
+print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=2').content)
+
