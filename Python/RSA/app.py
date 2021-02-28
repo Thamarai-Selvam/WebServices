@@ -153,13 +153,14 @@ def otpGen():
     opChoice = int(request.args['opChoice'])
 
     value = enc_msg=md5(message, opChoice)
+    # print("|    ".join(key for key in value))
     return {'message' : message, 'value' : value}
     # return home(message, value)
 
 @app.route('/', methods=['GET','POST'])
 def home(message='HELLO THERE !', value=""):
   return '''<!DOCTYPE html>
-<html>
+<html>  
 <head>
 <title>RSA</title>
 <style>

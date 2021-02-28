@@ -68,10 +68,17 @@ baseURL = "http://localhost:3000/"
 
 #test electric calculator
 
-print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=1').content)
-print(requests.get(baseURL+'ecalc?num=10&aChoice=0&num1=12&vChoice=1').content)
-print(requests.get(baseURL+'ecalc?num=10&aChoice=2&num1=12&vChoice=1').content)
-print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=0').content)
-print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=1').content)
-print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=2').content)
+# print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=1').content)
+# print(requests.get(baseURL+'ecalc?num=10&aChoice=0&num1=12&vChoice=1').content)
+# print(requests.get(baseURL+'ecalc?num=10&aChoice=2&num1=12&vChoice=1').content)
+# print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=0').content)
+# print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=1').content)
+# print(requests.get(baseURL+'ecalc?num=10&aChoice=1&num1=12&vChoice=2').content)
 
+#RSA
+baseURL = "http://localhost:5000/"
+print(requests.get(baseURL+'rsa?message=heythere&opChoice=0').content)
+print(requests.get(baseURL+'rsa?message=sampletext&opChoice=0').content)
+print(requests.get(baseURL+'rsa?message=cipherthisrandomslightlylongertext&opChoice=0').content)
+print(requests.get(baseURL+'rsa?message=73, 4, 100, 43, 36, 28, 4, 17, 117, 28, 43, 18, 17, 0, 13, 73, 63, 54, 18, 95, 43, 41, 28, 117, 95, 45, 95, 63, 13, 41, 4, 17, 117, 4, 58, 117&opChoice=1').content)
+print(requests.get(baseURL+'rsa?message=28, 4, 45, 117, 28, 4, 17, 4&opChoice=1').content)

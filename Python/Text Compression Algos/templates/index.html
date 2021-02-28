@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Compression Algos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #4db8ff;
+            text-align: center;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        .workarea {
+            text-align: left;
+            padding: 50px;
+        }
+        
+        span {
+            color: white;
+            font-style: oblique;
+        }
+        
+        .info {
+            background-color: #0099ff;
+            padding: 20px;
+            margin: -10px -50px 0 -50px;
+        }
+        
+        .api_proc {
+            background-color: #6600cc;
+            padding: 7px;
+            border-radius: 20px;
+        }
+        
+        input[type=text] {
+            width: 60%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        input[type=submit] {
+            width: 40%;
+            background-color: #00b359;
+            color: white;
+            padding: 10px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+        
+        input[type=submit]:hover {
+            background-color: #00994d;
+        }
+        
+        .response_form {
+            padding-top: 50px;
+        }
+    </style>
+
+</head>
+
+<body class="container">
+    <div class="row info">
+        <h1>Compression Algos</h1>
+        <p>API Usage : Compress and Decompress text and files</p>
+
+    </div>
+
+    <div class="workarea">
+        <form id="req_form" action="/compress" method=post enctype=multipart/form-data>
+            <center> <select name="opChoice" id="opChoice" onchange="changeset()">
+                <option id="hc" value="0" selected='true'>Huffman Coding</option>
+                <option id="rlc" value="1">Run Length Coding</option>
+                <option id="lzw" value="2"> Lempel -Ziv-Welch(LZW) Coding </option>
+                <option id="lc" value="3">Lossless Compression </option>
+                <option id="fc" value="4">Fast Compression</option>
+            </select></center>
+            <center> <select name="opCmpChoice" id="opCmpChoice" onchange="changeset()">
+                <option id="cmp" value="0" selected='true'>Compress</option>
+                <option id="dcmp" value="1">Decompress</option>
+               
+            </select></center>
+            </br>
+            <div id="opset1" style="display: block;">
+                <label for="data">Select File </label>
+                <input type="file" id="ifile" name="ifile" value=""></br>
+            </div>
+            <div id="opset2" style="display: block;">
+                <label for="data">Enter Text </label>
+                <input type="text" id="itext" name="itext" value="Sample Text"></br>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+
+        <div>{{resp_form}}</div>
+        <input type="hidden" id="itextVal" name="itextVal" value=""></br>
+    </div>
+    <script>
+        var opCmpChoice = document.getElementById('opCmpChoice').value;
+
+        function changeset() {
+            const opChoice = document.getElementById('opChoice').value;
+            opCmpChoice = document.getElementById('opCmpChoice').value;
+
+            if (opChoice == '0') {
+
+            } else if (opChoice == '1') {
+
+            } else {
+
+            }
+        }
+
+        document.getElementById('ifile').onchange = function() {
+            if (opCmpChoice == 0) {
+                localStorage.setItem("fileName", this.value.substring(12));
+                console.log('compress', this.value.substring(12));
+                document.getElementById('itextVal').value = this.value.substring(12);
+            } else {
+                var str = this.value.substring(12).replace('.cmp', '');
+                localStorage.setItem("fileName", str);
+                console.log('decompress', str);
+                document.getElementById('itextVal').value = str;
+            }
+
+        };
+        document.getElementById('itextVal').value = localStorage.getItem('fileName');
+    </script>
+</body>
+
+</html>
