@@ -81,8 +81,8 @@
                 <option id="hc" value="0" selected='true'>Huffman Coding</option>
                 <option id="rlc" value="1">Run Length Coding</option>
                 <option id="lzw" value="2"> Lempel -Ziv-Welch(LZW) Coding </option>
-                <option id="lc" value="3">Lossless Compression </option>
-                <option id="fc" value="4">Fast Compression</option>
+                <!-- <option id="lc" value="3">Lossless Compression </option>
+                <option id="fc" value="4">Fast Compression</option> -->
             </select></center>
             <center> <select name="opCmpChoice" id="opCmpChoice" onchange="changeset()">
                 <option id="cmp" value="0" selected='true'>Compress</option>
@@ -92,7 +92,7 @@
             </br>
             <div id="opset1" style="display: block;">
                 <label for="data">Select File </label>
-                <input type="file" id="ifile" name="ifile" value=""></br>
+                <input type="file" id="ifile" name="ifile"></br>
             </div>
             <div id="opset2" style="display: block;">
                 <label for="data">Enter Text </label>
@@ -112,11 +112,19 @@
             opCmpChoice = document.getElementById('opCmpChoice').value;
 
             if (opChoice == '0') {
+                document.getElementById('opset1').style.display = "block"
+                document.getElementById('opset2').style.display = "none"
+                document.getElementById('itext').value = ""
 
             } else if (opChoice == '1') {
+                document.getElementById('opset1').style.display = "none"
+                document.getElementById('opset2').style.display = "block"
+                document.getElementById('ifile').value = null
 
             } else {
-
+                document.getElementById('opset1').style.display = "block"
+                document.getElementById('opset2').style.display = "none"
+                document.getElementById('itext').value = ""
             }
         }
 
