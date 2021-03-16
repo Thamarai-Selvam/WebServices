@@ -1,39 +1,40 @@
-from flask import *  
-from flask_mail import *  
-from random import *  
+from flask import Flask, request, url_for, render_template
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
-app = Flask(__name__)  
+app = Flask(__name__)
+app.config.from_pyfile('config.cfg')
 
-mail = Mail(app)  
+mail = Mail(app)
 
-app.config["MAIL_SERVER"]='smtp.gmail.com'  
-app.config["MAIL_PORT"] = 465      
-app.config["MAIL_USERNAME"] = 'meliodastheman106@gmail.com'  
-app.config['MAIL_PASSWORD'] = 'meliodas1063000'  
-app.config['MAIL_USE_TLS'] = False  
-app.config['MAIL_USE_SSL'] = True  
+s = URLSafeTimedSerializer('Thisisasecret!')
 
-mail = Mail(app)  
-otp = randint(000000,999999) 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
+        # return '<form action="/" method="POST"><input name="email"><input type="submit"></form>'
+        return render_template("index.html") 
 
-@app.route('/')  
-def index():  
-    return render_template("index.html")  
+    email = request.form['email']
+    token = s.dumps(email, salt='email-confirm')
 
-@app.route('/verify',methods = ["POST"])  
-def verify():  
-    email = request.form["email"]   
-    msg = Message('OTP',sender = 'meliodastheman106@gmail.com', recipients = [email])  
-    msg.body = str(otp)  
-    mail.send(msg)  
-    return render_template('confirm.html')  
+    msg = Message('Confirm Email', sender='meliodastheman106@gmail.com', recipients=[email])
 
-@app.route('/validate',methods=["POST"])   
-def validate():  
-    user_otp = request.form['otp']  
-    if otp == int(user_otp):  
-        return "<h3> Email  verification is  successful </h3>"  
-    return "<h3>failure, OTP does not match</h3>"   
+    link = url_for('confirm_email', token=token, _external=True)
 
-if __name__ == '__main__':  
-    app.run(debug = True) 
+    msg.body = 'Your link is {}'.format(link)
+
+    mail.send(msg)
+
+    return '<h1>The email you entered is {}. The token is {}</h1>'.format(email, token)
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except SignatureExpired:
+        return '<h1>The token is expired!</h1>'
+    return '<h1>The token works!</h1>'
+
+if __name__ == '__main__':
+    app.run(debug=True)
