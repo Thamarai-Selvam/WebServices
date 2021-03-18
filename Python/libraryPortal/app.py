@@ -1,7 +1,9 @@
 from flask import Flask, request, url_for, render_template
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-import uuid, csv, datetime
+import uuid, csv, datetime, shutil
+from tempfile import NamedTemporaryFile
+from random import *  
 
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
@@ -12,6 +14,22 @@ s = URLSafeTimedSerializer('Thisisasecret!')
 
 tempData = {}
 allUserData = {}
+crollNum = ''
+cbPassKey = '' 
+cnPassKey = ''
+# Mail Config-----
+mail = Mail(app)  
+
+app.config["MAIL_SERVER"]='smtp.gmail.com'  
+app.config["MAIL_PORT"] = 465      
+app.config["MAIL_USERNAME"] = 'meliodastheman106@gmail.com'  
+app.config['MAIL_PASSWORD'] = 'meliodas1063000'  
+app.config['MAIL_USE_TLS'] = False  
+app.config['MAIL_USE_SSL'] = True  
+
+mail = Mail(app)  
+timedOTP = 1
+#end Mail Config-----
 
 @app.route('/register', methods=['GET', 'POST'])
 def index():
@@ -87,6 +105,59 @@ def cLogin():
     else:
         return render_template('login.html')
 
+@app.route('/changePass', methods=['GET', 'POST'])
+def passChange():
+    if request.method == 'POST':
+        bRollNum = request.form['rollNum']
+        bPassKey = request.form['passKey']
+        nPassKey = request.form['npassKey']
+        for userRow in allUserData:
+            print(userRow)
+            print(f"postRoll {bRollNum} | userRoll {userRow['rollNum']}")
+            if(int(bRollNum) == int(userRow['rollNum'])):
+                if(bPassKey == userRow['passKey']):
+                    print('updating....')
+                    cacheUserData(bRollNum, bPassKey, nPassKey)
+                    return otpCheckForPassUpdate(False, userRow['eMail'])
+                else:
+                    return '<h1>Incorrect Current Password !</h1>'
+    else:
+        infoMsg = ''
+        return render_template('passchange.html', infoMsg = infoMsg)
+
+
+@app.route('/validate',methods=["POST"])   
+def validate():  
+    user_otp = request.form['userOtp']  
+    print(f"timedOTP {timedOTP} | userOTP {user_otp}")
+    if(timedOTP == int(user_otp)):  
+        print('Otp Verified...')
+        return updatePassKey() 
+    return "<h3>failure, OTP does not match</h3>" 
+
+
+
+def cacheUserData(rollNum, bPassKey, nPassKey):
+    global crollNum,cbPassKey, cnPassKey
+    crollNum, cbPassKey, cnPassKey = rollNum, bPassKey, nPassKey
+
+def otpCheckForPassUpdate(isProtoComplete=False, eMail=''):
+    global timedOTP
+    email = eMail
+    timedOTP = randint(000000,999999) 
+    msg = Message('OTP',sender = 'meliodastheman106@gmail.com', recipients = [email])  
+    msg.body = str(timedOTP)  
+    mail.send(msg)  
+    print('Mail Sent....')
+    return render_template('confirm.html') 
+
+def updatePassKey():
+    if(updateCSV('rollNum', crollNum, 'passKey',cbPassKey, cnPassKey)):
+        return  '<h1>Password Updated Successfully !</h1>'
+    return '<h1>Password Updation Failed !</h1>'
+
+  
+    
 def fileLoader():
     global allUserData
     with open('data.csv') as csv_file:
@@ -94,7 +165,6 @@ def fileLoader():
             first_line = True
             allUserData = []
             for row in data:
-                
                 if not first_line:
                     print(row)
                     allUserData.append({ 
@@ -107,6 +177,53 @@ def fileLoader():
                 else:
                     first_line = False
 
+
+def updateCSV(colToIdentify, rowVal, colToUpdate, colVal, valToUpdate):
+    global allUserData
+    print(colToIdentify, rowVal, colToUpdate, colVal, valToUpdate)
+    tempfile = NamedTemporaryFile(mode='w', delete=False)
+    with open('data.csv','r', newline='', encoding='utf-8') as csv_file, tempfile:
+            reader = csv.reader(csv_file, delimiter=',')
+            writer =  csv.writer(tempfile, delimiter=',',lineterminator='\n')
+            first_line = True
+            isUpdated = False
+            allUserData = []
+            for row in reader:
+                if not first_line:
+                    print(row)
+                    if(row[1] == rowVal):
+                        if(row[6] == colVal):
+                            row[6] = valToUpdate
+                            nRow = { 
+                                'id'    : row[0],
+                                'rollNum' : row[1],
+                                'userName' : row[2],
+                                'phNum' : row[3],
+                                'eMail' : row[4],
+                                'passKey' : row[6]
+                            }
+                            allUserData.append({ 
+                                'rollNum' : row[1],
+                                'userName' : row[2],
+                                'phNum' : row[3],
+                                'eMail' : row[4],
+                                'passKey' : row[6]
+                            })
+                            writer.writerow(nRow)
+                            print(nRow)
+                            isUpdated = True
+                            print('-----DONE-----')
+                    writer.writerow(row)
+
+                else:
+                    first_line = False
+
+
+    
+    if(isUpdated):
+        shutil.move(tempfile.name, 'data.csv')
+        fileLoader()
+        return True
 if __name__ == '__main__':
     fileLoader()
     app.run(debug=True)     

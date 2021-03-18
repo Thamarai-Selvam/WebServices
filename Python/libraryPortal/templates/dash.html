@@ -7,6 +7,21 @@
 
 <body>
     Dash
+    <table border=1>
+        <tr>
+            <th> Roll Num </th>
+            <td> {{ userData['rollNum'] }} </td>
+        </tr>
+        <tr>
+            <th> User Name </th>
+            <td> {{ userData['userName'] }} </td>
+        </tr>
+    </table>
+    <br> <br> <br>
+    <form action="/changePass" method="POST">
+        <input type="text" value="{{ userData['rollNum'] }}">
+        <input type="submit" value="change Password">
+    </form>
 </body>
 
 </html>
