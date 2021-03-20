@@ -5,7 +5,7 @@ import os
 import json 
 import shutil
 import uuid
-from random import *
+from random import randint
 from tempfile import NamedTemporaryFile
 
 from flask import Flask, render_template, request, url_for, jsonify
@@ -175,8 +175,11 @@ def sendAmount():
         userToSend = currLoggedUser.selectedUser
         amountToSend = request.form['amountToSend']
         userTransDBID = getUserTransDBID(userToSend)
-        sendAmountToUser(userTransDBID, amountToSend)
-        return '<h1>Transaction Successful!</h1>'
+        if(float(amountToSend) <= float(getAcBalance(currLoggedUser.userData['id']))):
+            sendAmountToUser(userTransDBID, amountToSend)
+            return '<h1>Transaction Successful!</h1>'
+        else:
+            return '<h1>Insufficient Balance!</h1>'
     else:
         bRollNum = currLoggedUser.selectedUser
         for userRow in allUserData:
@@ -323,15 +326,16 @@ def createTransaction(luserDBID, amountToSend, newBalance, typeOfTrans):
     transactionContent = {
             "id": str(uuid.uuid4()),
             "typeOfTrans": typeOfTrans,
-            "transAmount": amountToSend,
-            "toAccount": "e52d8107-7614-4010-a30f-ae48851aac84",
+            "transAmount": float(amountToSend),
+            "toAccount": luserDBID,
             "timeOfTrans": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
-            "closingBalance": newBalance
+            "closingBalance": float(newBalance)
         }
     return transactionContent
 
 def updateJson(destUserID, transactionContent):
     allUserACData[destUserID]['transList'].append(transactionContent)
+    allUserACData[destUserID]['balAmount'] = float(transactionContent['closingBalance'])
 
 def sendAmountToUser(userDBID, amountToSend):
     luserDBID = userDBID

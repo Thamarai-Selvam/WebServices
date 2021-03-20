@@ -1,6 +1,6 @@
 {
     "cfd2218a-eeb5-4c6b-9e8e-29142e01d8d9": {
-        "balAmount": 12000,
+        "balAmount": 2255.0,
         "transList": [{
                 "id": 1001,
                 "typeOfTrans": "CD",
@@ -10,28 +10,61 @@
                 "closingBalance": 8000
             },
             {
-                "id": "adabd117-50ec-4e6f-9982-9c12b802a29b",
+                "id": "2ad400e1-dee9-4606-a918-cfb156459f78",
                 "typeOfTrans": "DB",
-                "transAmount": "35000",
+                "transAmount": 10000,
                 "toAccount": "e52d8107-7614-4010-a30f-ae48851aac84",
-                "timeOfTrans": "2021-03-20 18:07:42",
-                "closingBalance": -23000.0
+                "timeOfTrans": "2021-03-20 18:21:19",
+                "closingBalance": 2000.0
+            },
+            {
+                "id": "3c9034ef-eecc-45c3-b4fc-fdd9fb6e15b1",
+                "typeOfTrans": "DB",
+                "transAmount": 1500,
+                "toAccount": "cfd2218a-eeb5-4c6b-9e8e-29142e01d8d9",
+                "timeOfTrans": "2021-03-20 18:32:39",
+                "closingBalance": 500.0
+            },
+            {
+                "id": "0d42b7b7-390e-4da6-a509-387444512ae4",
+                "typeOfTrans": "CD",
+                "transAmount": 1755,
+                "toAccount": "cfd2218a-eeb5-4c6b-9e8e-29142e01d8d9",
+                "timeOfTrans": "2021-03-20 18:38:56",
+                "closingBalance": 2255.0
             }
         ]
     },
     "d0f1b0cc-d9d1-4626-ae58-f9b43d7bf464": {
-        "balAmount": 12000,
+        "balAmount": 11745.0,
         "transList": [{
-            "id": 1010,
-            "typeOfTrans": "CD",
-            "transAmount": 4000,
-            "toAccount": "cfd2218a-eeb5-4c6b-9e8e-29142e01d8d9",
-            "timeOfTrans": "2021-03-16 19:14:49",
-            "closingBalance": 8000
-        }]
+                "id": 1010,
+                "typeOfTrans": "CD",
+                "transAmount": 4000,
+                "toAccount": "cfd2218a-eeb5-4c6b-9e8e-29142e01d8d9",
+                "timeOfTrans": "2021-03-16 19:14:49",
+                "closingBalance": 8000
+            },
+            {
+                "id": "cfdfae05-f6f9-4802-8a73-e83b1c2ff68a",
+                "typeOfTrans": "CD",
+                "transAmount": 1500,
+                "toAccount": "d0f1b0cc-d9d1-4626-ae58-f9b43d7bf464",
+                "timeOfTrans": "2021-03-20 18:32:39",
+                "closingBalance": 13500.0
+            },
+            {
+                "id": "53ad2235-44a8-45d9-b009-6eebed398906",
+                "typeOfTrans": "DB",
+                "transAmount": 1755,
+                "toAccount": "d0f1b0cc-d9d1-4626-ae58-f9b43d7bf464",
+                "timeOfTrans": "2021-03-20 18:38:56",
+                "closingBalance": 11745.0
+            }
+        ]
     },
     "e52d8107-7614-4010-a30f-ae48851aac84": {
-        "balAmount": 12000,
+        "balAmount": 22000.0,
         "transList": [{
                 "id": 1011,
                 "typeOfTrans": "CD",
@@ -41,12 +74,12 @@
                 "closingBalance": 8000
             },
             {
-                "id": "c7e32044-5293-4d8a-9046-017794a01eef",
+                "id": "202bf48f-7110-48bd-aab0-563ba40f4469",
                 "typeOfTrans": "CD",
-                "transAmount": "35000",
+                "transAmount": 10000,
                 "toAccount": "e52d8107-7614-4010-a30f-ae48851aac84",
-                "timeOfTrans": "2021-03-20 18:07:42",
-                "closingBalance": 47000.0
+                "timeOfTrans": "2021-03-20 18:21:19",
+                "closingBalance": 22000.0
             }
         ]
     }
