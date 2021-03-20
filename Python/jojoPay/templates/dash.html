@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>index</title>
+</head>
+
+<body>
+    Dash
+    {% if userData %}
+    <table border=1>
+        <tr>
+            <th> Roll Num </th>
+            <td> {{ userData['rollNum'] }} </td>
+        </tr>
+        <tr>
+            <th> User Name </th>
+            <td> {{ userData['userName'] }} </td>
+        </tr>
+    </table>
+    
+    {% endif %}
+    
+    <br><br> <br> <br>
+    <form class="form-group" action='/findUser' method="POST">
+      <label for="">User</label>
+      <input type="number"
+        class="form-control" name="userID" id="userID" aria-describedby="helpId" placeholder="">
+      <small id="helpId" class="form-text text-muted">Enter user to send/ receive Amount</small>
+        <br>
+        <input type="submit" value="Find User">
+    </form>
+    <p>{{infoMsg}}</p>
+    <br>
+    <button type="button" onclick="window.location.href='{{ url_for("sendAmount") }}';">Send</button>
+    <button type="button" onclick="window.location.href='{{ url_for("receiveAmount") }}';">Receive</button>
+
+    <br><br> <br> <br><br> <br> <br>
+    <button type="button" onclick="window.location.href='{{ url_for("passChange") }}';">Change Password</button>
+    
+</body>
+
+</html>
