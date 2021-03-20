@@ -136,7 +136,9 @@ def cLogin():
             if(int(bRollNum) == int(userRow['rollNum'])):
                 if(bPassKey == userRow['passKey']):
                     currLoggedUser.userData = userRow
-                    return render_template("dash.html", userData = userRow) 
+                    pendingRequests = getformattedPendingRequests(userRow['id'])
+                    print(pendingRequests)
+                    return render_template("dash.html", userData = userRow, pendingRequests=pendingRequests) 
     else:
         return render_template('login.html')
 
@@ -172,14 +174,25 @@ def validate():
 @app.route('/sendAmount', methods=['GET', 'POST'])
 def sendAmount():
     if request.method == 'POST':
-        userToSend = currLoggedUser.selectedUser
-        amountToSend = request.form['amountToSend']
-        userTransDBID = getUserTransDBID(userToSend)
-        if(float(amountToSend) <= float(getAcBalance(currLoggedUser.userData['id']))):
-            sendAmountToUser(userTransDBID, amountToSend)
-            return '<h1>Transaction Successful!</h1>'
+        if('amountToSend' in request.form):
+            userToSend = currLoggedUser.selectedUser
+            amountToSend = request.form['amountToSend']
+            userTransDBID = getUserTransDBID(userToSend)
+            if(float(amountToSend) <= float(getAcBalance(currLoggedUser.userData['id']))):
+                sendAmountToUser(userTransDBID, amountToSend)
+                return '<h1>Transaction Successful!</h1>'
+            else:
+                return '<h1>Insufficient Balance!</h1>'
         else:
-            return '<h1>Insufficient Balance!</h1>'
+            userTransDBID = request.form.get('reqUID')
+            amountToSend = request.form.get('reqUAmount')
+            if(float(amountToSend) <= float(getAcBalance(currLoggedUser.userData['id']))):
+                sendAmountToUser(userTransDBID, amountToSend)
+                removeApprovedReqsFromUser(currLoggedUser.userData['id'], userTransDBID)
+                return '<h1>Transaction Successful!</h1>'
+            else:
+                return '<h1>Insufficient Balance!</h1>'
+
     else:
         bRollNum = currLoggedUser.selectedUser
         for userRow in allUserData:
@@ -191,14 +204,22 @@ def sendAmount():
 @app.route('/receiveAmount', methods=['GET', 'POST'])
 def receiveAmount():
     if request.method == 'POST':
-        pass
+        userToRequest = currLoggedUser.selectedUser
+        amountToRequest = request.form['amountToRequest']
+        userTransDBID = getUserTransDBID(userToRequest)
+        requestAmountFromUser(userTransDBID, amountToRequest)
+        for userRow in allUserData:
+            print(f"postRoll {userToRequest} | userRoll {userRow['rollNum']}")
+            if(int(userToRequest) == int(userRow['rollNum'])):
+                userName = userRow['userName']
+                return '<h1>Request Sent to '+userName+'!</h1>'
     else:
         bRollNum = currLoggedUser.selectedUser
         for userRow in allUserData:
             print(f"postRoll {bRollNum} | userRoll {userRow['rollNum']}")
             if(int(bRollNum) == int(userRow['rollNum'])):
                 userName = userRow['userName']
-                return render_template('sendAmount.html',userName = userName)
+                return render_template('receiveAmount.html',userName = userName)
 
 @app.route('/findUser', methods=['GET', 'POST'])
 def findUser():
@@ -348,7 +369,49 @@ def sendAmountToUser(userDBID, amountToSend):
     updateJson(lsuserDBID, forSender)
     updateJson(luserDBID, forReceiver)
     updateJsonDB()
+    transDBLoader()
 
+def createRequest(fromID, amountToRequest):
+    request = {
+        "id": fromID,
+        "reqAmount": amountToRequest
+    }
+    return request
+
+def requestAmountFromUser(userDBID, amountToRequest):
+    fromUserID = currLoggedUser.userData['id']
+    request = createRequest(fromUserID,amountToRequest)
+    allUserACData[userDBID]['pendingReqs'].append(request)
+
+def getPendingRequests(userID):
+    return allUserACData[userID]['pendingReqs']
+
+def getformattedPendingRequests(userID):
+    pReqs = getPendingRequests(userID)
+    formattedReqs = []
+    for req in pReqs:
+            freq = {
+                'id' : req['id'],
+                'userName' : getUserName(req['id']),
+                'Amount' : req['reqAmount']
+            }
+            formattedReqs.append(freq)
+    return formattedReqs
+
+def removeApprovedReqsFromUser(userID, rUserID):
+    print(userID,rUserID)
+    for i in range(len(allUserACData[userID]['pendingReqs'])):
+        if(allUserACData[userID]['pendingReqs'][i]["id"] == rUserID):
+            print(allUserACData[userID]['pendingReqs'][i])
+            del allUserACData[userID]['pendingReqs'][i]
+            updateJsonDB()
+            transDBLoader()
+            break
+
+def getUserName(userID):
+    for userRow in allUserData:
+        if(userID == userRow['id']):
+            return userRow['userName']
 
 def updateJsonDB():
     with open('database/transactionsDB.json', 'w') as fp:
@@ -370,4 +433,4 @@ def transDBLoader():
 if __name__ == '__main__':
     fileLoader()
     transDBLoader()
-    app.run(debug=True)     
+    app.run(debug=True,port=5000)     

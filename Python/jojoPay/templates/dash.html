@@ -6,8 +6,7 @@
 </head>
 
 <body>
-    Dash
-    {% if userData %}
+    Dash {% if userData %}
     <table border=1>
         <tr>
             <th> Roll Num </th>
@@ -18,15 +17,14 @@
             <td> {{ userData['userName'] }} </td>
         </tr>
     </table>
-    
+
     {% endif %}
-    
+
     <br><br> <br> <br>
     <form class="form-group" action='/findUser' method="POST">
-      <label for="">User</label>
-      <input type="number"
-        class="form-control" name="userID" id="userID" aria-describedby="helpId" placeholder="">
-      <small id="helpId" class="form-text text-muted">Enter user to send/ receive Amount</small>
+        <label for="">User</label>
+        <input type="number" class="form-control" name="userID" id="userID" aria-describedby="helpId" placeholder="">
+        <small id="helpId" class="form-text text-muted">Enter user to send/ receive Amount</small>
         <br>
         <input type="submit" value="Find User">
     </form>
@@ -34,10 +32,35 @@
     <br>
     <button type="button" onclick="window.location.href='{{ url_for("sendAmount") }}';">Send</button>
     <button type="button" onclick="window.location.href='{{ url_for("receiveAmount") }}';">Receive</button>
-
+    <br><br> <br>
+    {% if pendingRequests %}
+        <table border=1>
+        <tr>
+            <th> Requestor </th>
+            <th> Amount </th>
+            <th> Action </th>
+        </tr>
+        {% for req in pendingRequests %}
+        <tr>
+            <td> {{ req['userName'] }} </td>
+            <td> {{ req['Amount'] }} </td>
+             
+            <td>  
+            <form action="/sendAmount" method="post">
+                <input id="reqUID" name="reqUID" type="hidden" value="{{ req['id'] }}">
+                <input id="reqUAmount" name="reqUAmount" type="hidden" value="{{ req['Amount'] }}">
+                <input id="isReq" name="isReq" type="hidden" value="1">
+                <input type="submit" value="Send Amount">
+            </form>
+            </td>
+        </tr>
+        {% endfor %}
+        
+    </table>
+    {% endif %}
     <br><br> <br> <br><br> <br> <br>
     <button type="button" onclick="window.location.href='{{ url_for("passChange") }}';">Change Password</button>
-    
+
 </body>
 
 </html>
