@@ -121,6 +121,7 @@ def confirm_email(token):
         with open('data.csv', mode='a') as csv_file:
             data = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             data.writerow([uID, rollNum, userName, phNum, eMail, regOn, passKey])
+        fileLoader()
         return '<h1>Registered Successfully !</h1>'
 
 @app.route('/', methods=['GET', 'POST'])
@@ -139,7 +140,12 @@ def cLogin():
                     pendingRequests = getformattedPendingRequests(userRow['id'])
                     print(pendingRequests)
                     return render_template("dash.html", userData = userRow, pendingRequests=pendingRequests) 
+                else:
+                    return '<h1>Incorrect Password !</h1>'
+        else:
+            return '<h1>User Not found, Register Please !</h1>'
     else:
+        fileLoader()        
         return render_template('login.html')
 
 @app.route('/changePass', methods=['GET', 'POST'])
@@ -158,7 +164,9 @@ def passChange():
                     return otpCheckForPassUpdate(False, userRow['eMail'])
                 else:
                     return '<h1>Incorrect Current Password !</h1>'
-    else:
+        else:
+            return '<h1>User Not found !</h1>'
+    else:        
         infoMsg = ''
         return render_template('passchange.html', infoMsg = infoMsg)
 
@@ -308,6 +316,7 @@ def updateCSV(colToIdentify, rowVal, colToUpdate, colVal, valToUpdate):
                                 'userName' : row[2],
                                 'phNum' : row[3],
                                 'eMail' : row[4],
+                                'regOn' : row[5],
                                 'passKey' : row[6]
                             }
                             allUserData.append({ 
