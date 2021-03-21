@@ -3,36 +3,36 @@
 
 <head>
     <title>index</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
-
 </head>
 
 <body>
-    <h4 class=""> jojoPay </h4>   
-    <button type="button" class="cPassBtn" onclick="window.location.href='{{ url_for("passChange") }}';">Change Password</button>
-    </br>
-    {% if userData %}
-    <h5> Roll Num </h5>{{ userData['rollNum'] }} 
-    </br>
-    <h5> User Name </h5>{{ userData['userName'] }} 
-       
+    Dash {% if userData %}
+    <table border=1>
+        <tr>
+            <th> Roll Num </th>
+            <td> {{ userData['rollNum'] }} </td>
+        </tr>
+        <tr>
+            <th> User Name </th>
+            <td> {{ userData['userName'] }} </td>
+        </tr>
     </table>
 
     {% endif %}
 
-    </br></br> </br> </br>
+    <br><br> <br> <br>
     <form class="form-group" action='/findUser' method="POST">
         <label for="">User</label>
         <input type="number" class="form-control" name="userID" id="userID" aria-describedby="helpId" placeholder="">
         <small id="helpId" class="form-text text-muted">Enter user to send/ receive Amount</small>
-        </br><p class='infoMsg'>{{infoMsg}}</p>
+        <br>
         <input type="submit" value="Find User">
     </form>
-    <div class='cust-div'>
-    </br>
+    <p>{{infoMsg}}</p>
+    <br>
     <button type="button" onclick="window.location.href='{{ url_for("sendAmount") }}';">Send</button>
     <button type="button" onclick="window.location.href='{{ url_for("receiveAmount") }}';">Receive</button>
-    </br></br> </br>
+    <br><br> <br>
     {% if pendingRequests %}
         <table border=1>
         <tr>
@@ -58,8 +58,9 @@
         
     </table>
     {% endif %}
-    </br></br> </br> </br></br> </br> </br>
-    </div>
+    <br><br> <br> <br><br> <br> <br>
+    <button type="button" onclick="window.location.href='{{ url_for("passChange") }}';">Change Password</button>
+
 </body>
 
 </html>

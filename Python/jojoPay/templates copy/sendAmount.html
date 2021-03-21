@@ -3,16 +3,13 @@
 
 <head>
     <title>index</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
-
 </head>
 
 <body>
-    <form action="/receiveAmount" method="POST">
+    <form action="/sendAmount" method="POST">
         <h4>User : {{userName }}</h4>
-        Request Amount: <input type="number" name="amountToRequest"></br>
+        Amount To Send: <input type="number" name="amountToSend"></br>
         <br>
-
         <input type="submit" value="Submit">
     </form>
 </body>
