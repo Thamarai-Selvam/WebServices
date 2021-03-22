@@ -12,7 +12,7 @@ Directory Structure
   To run APIs, Navigate to language/Application folder and follow below proc's.
   
   ### For Python APIs  
-  *Built using Flask freamework, use pip to install missing packages if in case of exceptions*
+  *Built using Flask framework, use pip to install missing packages if in case of exceptions*
     
 ``` py app.py```  
    Go to localhost:5000  
