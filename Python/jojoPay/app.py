@@ -1,24 +1,24 @@
 #region-----------imports-------------
 import csv
 import datetime
+import json
 import os
-import json 
 import shutil
 import uuid
 from random import randint
 from tempfile import NamedTemporaryFile
-
-from flask import Flask, render_template, request, url_for, jsonify
+import configparser
+from flask import Flask, jsonify, render_template, request, url_for
 from flask_mail import Mail, Message
 from itsdangerous import SignatureExpired, URLSafeTimedSerializer
-
+from twilio.rest import Client
 
 #endregion-----------imports------------
 
 #region------------app configurations---------------
 app = Flask(__name__)
 app.config.from_pyfile('config.cfg')
-
+app.config.from_pyfile('twilioConfig.cfg')
 s = URLSafeTimedSerializer('Thisisasecret!')
 #region---------global userConfigurations-------------
 tempData = {}
@@ -30,14 +30,6 @@ allUserACData = {}
 #endregion---------global userConfigurations-------------
 
 #region---------Mail Config-----
-mail = Mail(app)  
- 
-app.config["MAIL_SERVER"]='smtp.gmail.com'  
-app.config["MAIL_PORT"] = 465      
-app.config["MAIL_USERNAME"] = 'meliodastheman106@gmail.com'  
-app.config['MAIL_PASSWORD'] = 'meliodas1063000'  
-app.config['MAIL_USE_TLS'] = False  
-app.config['MAIL_USE_SSL'] = True  
 
 mail = Mail(app)  
 timedOTP = 1
@@ -57,11 +49,11 @@ timedOTP = 1
 #                                        from and to respective A/c's.
 #
 #endregion ------Payment Hierarchy-------------------
-
 class currLoggedUser:
     userData = {}
     selectedUser = ''
 
+client = Client(app.config['SID'], app.config['AUTH_TOKEN'])
 
 #region-----------------------routes------------------------------------
 @app.route('/register', methods=['GET', 'POST'])
@@ -118,7 +110,7 @@ def confirm_email(token):
             if(int(rollNum) == int(userRow['rollNum'])):
                 return '<h1>User Already Registered !</h1>'
 
-        with open('data.csv', mode='a') as csv_file:
+        with open('database/data.csv', mode='a') as csv_file:
             data = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             data.writerow([uID, rollNum, userName, phNum, eMail, regOn, passKey])
         fileLoader()
@@ -289,6 +281,7 @@ def fileLoader():
                         'userName' : row[2],
                         'phNum' : row[3],
                         'eMail' : row[4],
+                        'regOn' : row[5],
                         'passKey' : row[6]
                     })
                 else:
@@ -376,7 +369,9 @@ def sendAmountToUser(userDBID, amountToSend):
     forSender = createTransaction(lsuserDBID,amountToSend, newSenderBalance, "DB")
     forReceiver = createTransaction(luserDBID,amountToSend, newReceiverBalance, "CD")
     updateJson(lsuserDBID, forSender)
+    sendMessage(lsuserDBID,forSender)
     updateJson(luserDBID, forReceiver)
+    sendMessage(luserDBID,forReceiver)
     updateJsonDB()
     transDBLoader()
 
@@ -437,6 +432,28 @@ def transDBLoader():
         with open('database/transactionsDB.json') as json_file: 
             allUserACData = json.load(json_file)
 
+def getPhone(userID):
+    for userRow in allUserData:
+        if(userID == userRow['id']):
+            return '+91'+str(userRow['phNum'])
+
+def getEndingWith(userID):
+    rollNum = ''
+    for userRow in allUserData:
+        if(userID == userRow['id']):
+            rollNum = str(userRow['rollNum'])
+    return rollNum[:-4]
+
+def getMsgBody(transactionContent):
+    typeofTrans = "Debited" if transactionContent['typeOfTrans'] == 'DB' else 'Credited'
+    endingWith = getEndingWith(transactionContent['id'])
+    msgBody = f"Your account ending with A/c XX-{endingWith} has been {typeofTrans} with ₹.{transactionContent['transAmount']} on {transactionContent['timeOfTrans']}. Your current Balance is ₹.{transactionContent['closingBalance']}"
+    return msgBody
+def sendMessage(userID, transactionContent):
+
+    client.messages.create(to=getPhone(userID), 
+                       from_=app.config['PHONE'], 
+                       body=getMsgBody(transactionContent))
 #endregion---------------Helper API's-----------------------------------------
 
 if __name__ == '__main__':

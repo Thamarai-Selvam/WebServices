@@ -8,9 +8,9 @@
 </head>
 
 <body>
-    <form action="/sendAmount" method="POST">
+    <form class="cust-form" action="/sendAmount" method="POST">
         <h4>User : {{userName }}</h4>
-        Amount To Send: <input type="number" name="amountToSend"></br>
+        Amount To Send: <input type="number" step="any" name="amountToSend"></br>
         <br>
         <input type="submit" value="Submit">
     </form>

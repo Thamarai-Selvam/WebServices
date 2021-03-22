@@ -1,7 +1,6 @@
 import email, smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-password = "meliodas1063000"
 
 def sendMailtoRecipient(senderMail = "meliodastheman106@gmail.com", receiverMail = "sthamarai001@gmail.com"):
     subject = "Test eMail"

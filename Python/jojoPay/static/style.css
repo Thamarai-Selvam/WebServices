@@ -17,7 +17,7 @@ body {
     margin-left: 30%;
 }
 
-form {
+.cust-form {
     background-color: #f2f2f2;
     border-radius: 8%;
     padding: 10%;
@@ -48,6 +48,7 @@ button {
     cursor: pointer;
     float: right;
     margin-top: 3vh;
+    margin-bottom: 3vh;
 }
 
 .infoMsg {
@@ -59,10 +60,45 @@ button {
 }
 
 .cust-div {
-    display: block;
+    display: block !important;
 }
 
 .cPassBtn {
     float: right !important;
     width: 20% !important;
+    display: flexbox !important;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+th,
+tr,
+td {
+    text-align: left;
+    padding: 8px;
+    height: 55px !important;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2
+}
+
+.pendingReqs {
+    display: block !important;
+}
+
+.reqSendFormBtn {
+    background-color: #f2f2f2;
+    border-radius: 8%;
+    padding: 10%;
+    display: block;
+    position: relative;
+    place-content: center;
+    align-items: center;
+    justify-content: center;
 }
